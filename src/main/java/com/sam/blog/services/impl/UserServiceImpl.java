@@ -6,10 +6,12 @@ import com.sam.blog.payloads.UserDTO;
 import com.sam.blog.repositories.UserRepositories;
 import com.sam.blog.services.UserService;
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class UserServiceImpl implements UserService {
 
 	private final UserRepositories userRepositories;
