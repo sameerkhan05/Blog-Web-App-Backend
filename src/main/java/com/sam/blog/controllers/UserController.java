@@ -1,5 +1,6 @@
 package com.sam.blog.controllers;
 
+import com.sam.blog.payloads.ApiResponse;
 import com.sam.blog.payloads.UserDTO;
 import com.sam.blog.services.UserService;
 import org.springframework.http.HttpStatus;
@@ -29,4 +30,24 @@ public class UserController {
 		List<UserDTO> getAllUsers = userService.getAllUsers();
 		return ResponseEntity.ok(getAllUsers);
 	}
+
+	@PutMapping("/{userId}")
+	public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO, @PathVariable Long userId) {
+		UserDTO updateUser = userService.updateUser(userDTO, userId);
+		return ResponseEntity.ok(updateUser);
+	}
+
+	@GetMapping("/{userId}")
+	public ResponseEntity<UserDTO> getUserById(@PathVariable Long userId) {
+		UserDTO getUserById = userService.getUserById(userId);
+		return ResponseEntity.ok(getUserById);
+	}
+
+	@DeleteMapping("/{userId}")
+	public ResponseEntity<ApiResponse> deleteUser(@PathVariable Long userId) {
+		userService.deleteUser(userId);
+		return new ResponseEntity(new ApiResponse("User deleted successfully", true), HttpStatus.OK);
+	}
+
+
 }
