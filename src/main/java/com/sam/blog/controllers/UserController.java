@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -46,8 +47,16 @@ public class UserController {
 	@DeleteMapping("/{userId}")
 	public ResponseEntity<ApiResponse> deleteUser(@PathVariable Long userId) {
 		userService.deleteUser(userId);
-		return new ResponseEntity(new ApiResponse("User deleted successfully", true), HttpStatus.OK);
+		ApiResponse response = new ApiResponse(
+				"User deleted successfully",
+				true,
+				"User",
+				"id",
+				userId,
+				LocalDateTime.now(),
+				"USER_DELETED"
+		);
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
-
 
 }

@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -12,4 +14,9 @@ import lombok.Setter;
 public class ApiResponse {
 	private String message;
 	private boolean success;
+	private String resourceName;
+	private String fieldName;
+	private long fieldValue;
+	private LocalDateTime timestamp;
+	private String errorCode;
 }
