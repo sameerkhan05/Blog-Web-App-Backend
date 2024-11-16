@@ -3,6 +3,7 @@ package com.sam.blog.controllers;
 import com.sam.blog.payloads.ApiResponse;
 import com.sam.blog.payloads.UserDTO;
 import com.sam.blog.services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class UserController {
 	}
 
 	@PostMapping("/")
-	public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
+	public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userDTO) {
 		UserDTO createdUser = userService.createUser(userDTO);
 		return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
 	}
@@ -33,7 +34,7 @@ public class UserController {
 	}
 
 	@PutMapping("/{userId}")
-	public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO, @PathVariable Long userId) {
+	public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO userDTO, @PathVariable Long userId) {
 		UserDTO updateUser = userService.updateUser(userDTO, userId);
 		return ResponseEntity.ok(updateUser);
 	}
