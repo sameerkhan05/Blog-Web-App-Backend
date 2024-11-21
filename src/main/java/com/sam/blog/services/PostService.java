@@ -1,6 +1,5 @@
 package com.sam.blog.services;
 
-import com.sam.blog.entities.Post;
 import com.sam.blog.payloads.PostDTO;
 import org.springframework.stereotype.Service;
 
