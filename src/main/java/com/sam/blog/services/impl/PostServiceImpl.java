@@ -58,12 +58,17 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	public List<PostDTO> getAllPost() {
-		return null;
+		List<Post> allPosts = this.postRepo.findAll();
+		List<PostDTO> postDTOS = allPosts.stream().map((post) -> this.modelMapper.map(post, PostDTO.class)).collect(Collectors.toList());
+		return postDTOS;
 	}
 
 	@Override
 	public PostDTO getPostById(Long postId) {
-		return null;
+		Post post = this.postRepo.findById(postId)
+				.orElseThrow(() -> new ResourceNotFoundException("Post", "PostId", postId));
+
+		return this.modelMapper.map(post, PostDTO.class);
 	}
 
 	@Override
@@ -72,7 +77,7 @@ public class PostServiceImpl implements PostService {
 		List<Post> posts = this.postRepo.findByCategory(category);
 		List<PostDTO> postDTOS = posts.stream().map((post) -> this.modelMapper
 						.map(post, PostDTO.class))
-						.collect(Collectors.toList());
+				.collect(Collectors.toList());
 		return postDTOS;
 	}
 
@@ -81,7 +86,7 @@ public class PostServiceImpl implements PostService {
 		User user = this.userRepositories.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "userId", userId));
 		List<Post> posts = this.postRepo.findByUser(user);
 		List<PostDTO> postDTOS = posts.stream().map((post) -> this.modelMapper
-				.map(post, PostDTO.class))
+						.map(post, PostDTO.class))
 				.collect(Collectors.toList());
 		return postDTOS;
 	}
