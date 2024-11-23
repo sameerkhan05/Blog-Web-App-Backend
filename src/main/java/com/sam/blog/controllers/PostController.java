@@ -1,11 +1,13 @@
 package com.sam.blog.controllers;
 
+import com.sam.blog.payloads.ApiResponse;
 import com.sam.blog.payloads.PostDTO;
 import com.sam.blog.services.PostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -47,5 +49,25 @@ public class PostController {
 		return new ResponseEntity<PostDTO>(postDTO, HttpStatus.OK);
 	}
 
+	@DeleteMapping("/posts/{postId}")
+	public ResponseEntity<ApiResponse> deletePost(@PathVariable Long postId) {
+		this.postService.deletePost(postId);
+		ApiResponse deleteResponse = new ApiResponse(
+				"Post deleted successfully",
+				true,
+				"Post",
+				"id",
+				postId,
+				LocalDateTime.now(),
+				"POST_DELETED"
+		);
+		return new ResponseEntity<>(deleteResponse, HttpStatus.OK);
+	}
+
+	@PutMapping("/posts/{postId}")
+	public ResponseEntity<PostDTO> updatePost(@RequestBody PostDTO postDTO, @PathVariable Long postId) {
+		PostDTO updatePost = this.postService.updatePost(postDTO, postId);
+		return new ResponseEntity<PostDTO>(updatePost, HttpStatus.OK);
+	}
 
 }

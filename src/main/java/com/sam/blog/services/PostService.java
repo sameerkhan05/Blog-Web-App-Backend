@@ -12,7 +12,7 @@ public interface PostService {
 
 	PostDTO updatePost(PostDTO postDTO, Long postId);
 
-	PostDTO deletePost(Long postId);
+	void deletePost(Long postId);
 
 	List<PostDTO> getAllPost();
 
