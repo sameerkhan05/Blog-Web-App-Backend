@@ -2,6 +2,7 @@ package com.sam.blog.controllers;
 
 import com.sam.blog.payloads.ApiResponse;
 import com.sam.blog.payloads.PostDTO;
+import com.sam.blog.payloads.PostResponse;
 import com.sam.blog.services.PostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,12 +39,14 @@ public class PostController {
 	}
 
 	@GetMapping("/posts")
-	public ResponseEntity<List<PostDTO>> getAllPost(
-			@RequestParam(value = "pageNumber", defaultValue = "1", required = false) Integer pageNumber,
-			@RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize
+	public ResponseEntity<PostResponse> getAllPost(
+			@RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
+			@RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize,
+			@RequestParam(value = "sortBy", defaultValue = "postId", required = false) String sortBy,
+			@RequestParam(value = "sortDir", defaultValue = "ASC", required = false) String sortDir
 	) {
-		List<PostDTO> allPost = this.postService.getAllPost(pageNumber, pageSize);
-		return new ResponseEntity<List<PostDTO>>(allPost, HttpStatus.OK);
+		PostResponse postResponse = this.postService.getAllPost(pageNumber, pageSize, sortBy, sortDir);
+		return new ResponseEntity<PostResponse>(postResponse, HttpStatus.OK);
 	}
 
 	@GetMapping("/posts/{postId}")
@@ -71,6 +74,12 @@ public class PostController {
 	public ResponseEntity<PostDTO> updatePost(@RequestBody PostDTO postDTO, @PathVariable Long postId) {
 		PostDTO updatePost = this.postService.updatePost(postDTO, postId);
 		return new ResponseEntity<PostDTO>(updatePost, HttpStatus.OK);
+	}
+
+	@GetMapping("/posts/search/{keywords}")
+	public ResponseEntity<List<PostDTO>> searchByTitle(@PathVariable("keywords") String keywords) {
+		List<PostDTO> result = this.postService.searchPosts(keywords);
+		return new ResponseEntity<List<PostDTO>>(result, HttpStatus.OK);
 	}
 
 }

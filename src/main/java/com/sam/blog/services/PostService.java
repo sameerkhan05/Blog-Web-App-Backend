@@ -1,6 +1,7 @@
 package com.sam.blog.services;
 
 import com.sam.blog.payloads.PostDTO;
+import com.sam.blog.payloads.PostResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public interface PostService {
 
 	void deletePost(Long postId);
 
-	List<PostDTO> getAllPost(Integer pageNumber, Integer pageSize);
+	PostResponse getAllPost(Integer pageNumber, Integer pageSize, String sortBy, String sortDir);
 
 	PostDTO getPostById(Long postId);
 

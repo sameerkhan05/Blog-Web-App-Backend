@@ -5,6 +5,7 @@ import com.sam.blog.entities.Post;
 import com.sam.blog.entities.User;
 import com.sam.blog.exceptions.ResourceNotFoundException;
 import com.sam.blog.payloads.PostDTO;
+import com.sam.blog.payloads.PostResponse;
 import com.sam.blog.repositories.CategoryRepo;
 import com.sam.blog.repositories.PostRepo;
 import com.sam.blog.repositories.UserRepositories;
@@ -13,6 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -66,15 +68,31 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public List<PostDTO> getAllPost(Integer pageNumber, Integer pageSize) {
+	public PostResponse getAllPost(Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
 
-		Pageable pageable = PageRequest.of(pageNumber, pageSize);
+		Sort sort = null;
+		if (sortDir.equalsIgnoreCase("asc")) {
+			sort = Sort.by(sortBy).ascending();
+		} else {
+			sort = Sort.by(sortBy).descending();
+		}
+
+		Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
 
 		Page<Post> pagePost = this.postRepo.findAll(pageable);
 		List<Post> allPosts = pagePost.getContent();
 
 		List<PostDTO> postDTOS = allPosts.stream().map((post) -> this.modelMapper.map(post, PostDTO.class)).collect(Collectors.toList());
-		return postDTOS;
+
+		PostResponse postResponse = new PostResponse();
+		postResponse.setContent(postDTOS);
+		postResponse.setPageNumber(pagePost.getNumber());
+		postResponse.setPageSize(pagePost.getSize());
+		postResponse.setTotalElement(pagePost.getNumberOfElements());
+		postResponse.setTotalPages(pagePost.getTotalPages());
+		postResponse.setLastPage(pagePost.isLast());
+
+		return postResponse;
 	}
 
 	@Override
@@ -107,6 +125,8 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	public List<PostDTO> searchPosts(String keyword) {
-		return null;
+		List<Post> posts = this.postRepo.findByTitleContaining(keyword);
+		List<PostDTO> postDTOS = posts.stream().map((post) -> this.modelMapper.map(post, PostDTO.class)).collect(Collectors.toList());
+		return postDTOS;
 	}
 }
