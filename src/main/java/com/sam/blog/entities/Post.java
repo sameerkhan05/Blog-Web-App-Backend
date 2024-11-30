@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "post")
@@ -17,7 +19,7 @@ public class Post {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long postId;
 
-	@Column(name = "post_title",length = 100,nullable = false)
+	@Column(name = "post_title", length = 100, nullable = false)
 	private String title;
 
 	@Column(length = 1000)
@@ -32,4 +34,7 @@ public class Post {
 
 	@ManyToOne
 	private User user;
+
+	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+	private Set<Comment> comments = new HashSet<>();
 }
