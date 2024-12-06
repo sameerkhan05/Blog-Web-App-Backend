@@ -47,21 +47,20 @@ public class GlobalExceptionHandler {
 	}
 
 
-//	@ExceptionHandler(Exception.class)
-//	public ResponseEntity<ApiResponse> globalException(Exception ex, WebRequest request) {
-//
-//		ApiResponse response = new ApiResponse(
-//				"An unexpected error occurred",
-//				false,
-//				null,
-//				null,
-//				0L,
-//				LocalDateTime.now(),
-//				"INTERNAL_SERVER_ERROR"
-//		);
-//
-//		return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-//	}
+	@ExceptionHandler(ApiException.class)
+	public ResponseEntity<ApiResponse> handelApiException(ApiException ex, WebRequest request) {
 
+		ApiResponse response = new ApiResponse(
+				ex.getMessage(),
+				false,
+				ex.getResourceName(),
+				ex.getFieldName(),
+				(Long) ex.getFieldValue(),
+				LocalDateTime.now(),
+				"RESOURCE_NOT_FOUND"
+		);
+
+		return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+	}
 	
 }
