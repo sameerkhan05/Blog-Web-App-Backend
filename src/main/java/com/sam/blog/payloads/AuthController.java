@@ -3,6 +3,7 @@ package com.sam.blog.payloads;
 import com.sam.blog.exceptions.ApiException;
 import com.sam.blog.security.JwtAuthResponse;
 import com.sam.blog.security.JwtTokenHelper;
+import com.sam.blog.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,9 @@ public class AuthController {
 	private UserDetailsService userDetailsService;
 	@Autowired
 	private AuthenticationManager authenticationManager;
+
+	@Autowired
+	private UserService userService;
 
 	@PostMapping("/login")
 	public ResponseEntity<JwtAuthResponse> createToken(@RequestBody JwtAuthRequest request) throws Exception {
@@ -63,5 +67,12 @@ public class AuthController {
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<String> handleException(Exception e) {
 		return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+	}
+
+	//register Api
+	@PostMapping("/register")
+	public ResponseEntity<UserDTO> registerUser(@RequestBody UserDTO userDTO) {
+		UserDTO registerUser = this.userService.registerNewUser(userDTO);
+		return new ResponseEntity<UserDTO>(registerUser, HttpStatus.CREATED);
 	}
 }

@@ -6,6 +6,7 @@ import com.sam.blog.payloads.UserDTO;
 import java.util.List;
 
 public interface UserService {
+	UserDTO registerNewUser(UserDTO user);
 	UserDTO createUser(UserDTO user);
 	UserDTO updateUser(UserDTO user, Long userId);
 	UserDTO getUserById(Long userId);
